@@ -7,16 +7,40 @@ import com.gmail.nossr50.util.player.UserManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.util.HashMap;
+
 public class BlockBreakListener implements Listener {
     private McMMOMiningRestrictions main;
+    private HashMap<Material, BlockRestriction> restrictions = new HashMap<>();
 
     BlockBreakListener(McMMOMiningRestrictions main) {
         this.main = main;
+
+        loadProtections();
+    }
+
+    public void loadProtections() {
+        restrictions.clear();
+
+        ConfigurationSection rootSection = main.getConfig().getConfigurationSection("Restrictions");
+        for (String sectionKey : rootSection.getKeys(false)) {
+            ConfigurationSection protectionSection = rootSection.getConfigurationSection(sectionKey);
+
+            Material protectedMaterial = Material.getMaterial(sectionKey.toUpperCase());
+
+            PrimarySkillType requiredSkill = PrimarySkillType.getSkill(protectionSection.getString("Skill"));
+            int requiredLevel = protectionSection.getInt("Level");
+            String chatMessage = protectionSection.getString("Message");
+            String actionbarMessage = protectionSection.getString("Actionbar");
+
+            restrictions.put(protectedMaterial, new BlockRestriction(requiredSkill, requiredLevel, chatMessage, actionbarMessage));
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -28,34 +52,28 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        // Check if the block being broken is registered in the config
-        ConfigurationSection section = main.getConfig().getConfigurationSection("Restrictions." + event.getBlock().getType().name());
-        if (section == null) {
+        // Block isn't configured, don't protect it
+        if (!restrictions.containsKey(event.getBlock().getType())) {
             return;
         }
 
-        // Get the required skill to break the block
-        PrimarySkillType skillType = PrimarySkillType.getSkill(section.getString("Skill"));
-        if (skillType == null) {
-            return;
-        }
-
-        // Get the required skill and the player's skill level
-        int requiredLevel = section.getInt("Level");
+        BlockRestriction restriction = restrictions.get(event.getBlock().getType());
+        PrimarySkillType skillType = restriction.getRequiredSkill();
         int playerLevel = ExperienceAPI.getLevel(event.getPlayer(), skillType);
 
+
         // Prevent the block from being broken if the player's level isn't high enough
-        if (requiredLevel > playerLevel) {
+        if (restriction.getRequiredLevel() > playerLevel) {
             event.setCancelled(true);
 
             // Send the player a configured message when the break is cancelled
-            String message = section.getString("Message");
+            String message = restriction.getChatMessage();
             if (message != null && !message.isEmpty()) {
                 event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
             }
 
             // Send the player a configured actionbar message when the break is cancelled
-            String actionbar = section.getString("Actionbar");
+            String actionbar = restriction.getActionbarMessage();
             if (actionbar != null && !actionbar.isEmpty()) {
                 event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionbar));
             }

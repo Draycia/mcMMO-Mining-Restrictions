@@ -7,9 +7,11 @@ import org.bukkit.command.CommandSender;
 
 public class MMRCommand implements CommandExecutor {
     private McMMOMiningRestrictions main;
+    private BlockBreakListener blockBreakListener;
 
-    MMRCommand(McMMOMiningRestrictions main) {
+    MMRCommand(McMMOMiningRestrictions main, BlockBreakListener blockBreakListener) {
         this.main = main;
+        this.blockBreakListener = blockBreakListener;
     }
 
     @Override
@@ -21,6 +23,7 @@ public class MMRCommand implements CommandExecutor {
 
         // Otherwise reload config and alert the command sender the command was ran
         main.reloadConfig();
+        blockBreakListener.loadProtections();
 
         String message = "&amcMMO-Mining-Restrictions successfully reloaded!";
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

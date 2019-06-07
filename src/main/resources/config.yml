@@ -2,16 +2,20 @@ Restrictions:
   IRON_ORE:
     Skill: Mining
     Level: 15
-    Actionbar: 'You must be level 15 in Mining to mine Iron Ore!'
+    Actionbar: ''
+    Message: ''
   GOLD_ORE:
     Skill: Mining
     Level: 30
-    Message: 'You must be level 30 in Mining to mine Gold Ore!'
+    Actionbar: ''
+    Message: ''
   DIAMOND_ORE:
     Skill: Mining
     Level: 45
-    Actionbar: 'You must be level 45 in Mining to mine Diamond Ore!'
+    Actionbar: ''
+    Message: ''
   EMERALD_ORE:
     Skill: Mining
     Level: 60
-    Message: 'You must be level 15 in Mining to mine Iron Ore!'
+    Actionbar: ''
+    Message: ''
