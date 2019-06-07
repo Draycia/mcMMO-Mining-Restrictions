@@ -7,3 +7,4 @@ commands:
   mmr:
     usage: /mmr reload
     permission: mmr.reload
+    description: Reloads the plugin's config

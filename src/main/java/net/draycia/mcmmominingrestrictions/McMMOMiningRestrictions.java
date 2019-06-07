@@ -10,6 +10,7 @@ public final class McMMOMiningRestrictions extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
 
+        // Primary command, currently only used for reloading
         getCommand("mmr").setExecutor(new MMRCommand(this));
     }
 }
