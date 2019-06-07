@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.draycia</groupId>
-    <artifactId>mcMMO-Mining-Restritions</artifactId>
+    <artifactId>mcMMO-Mining-Restrictions</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>mcMMOMiningRestritions</name>
+    <name>mcMMOMiningRestrictions</name>
 
     <properties>
         <java.version>1.8</java.version>
