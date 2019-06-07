@@ -1,0 +1,9 @@
+name: mcMMOMiningRestritions
+version: ${project.version}
+main: net.draycia.mcmmominingrestritions.McMMOMiningRestritions
+api-version: 1.13
+depend: [mcMMO]
+commands:
+  mmr:
+    usage: /mmr reload
+    permission: mmr.reload
