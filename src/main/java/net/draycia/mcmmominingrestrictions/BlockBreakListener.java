@@ -21,24 +21,31 @@ public class BlockBreakListener implements Listener {
 
     BlockBreakListener(McMMOMiningRestrictions main) {
         this.main = main;
-
+        
         loadProtections();
     }
 
+    /**
+     * Clear protections and load them in from the config
+     */
     public void loadProtections() {
         restrictions.clear();
 
+        // Iterate through all block entries in the config
         ConfigurationSection rootSection = main.getConfig().getConfigurationSection("Restrictions");
         for (String sectionKey : rootSection.getKeys(false)) {
             ConfigurationSection protectionSection = rootSection.getConfigurationSection(sectionKey);
 
+            // The key name is the material
             Material protectedMaterial = Material.getMaterial(sectionKey.toUpperCase());
 
+            // Get the information about the restriction that's necessary
             PrimarySkillType requiredSkill = PrimarySkillType.getSkill(protectionSection.getString("Skill"));
             int requiredLevel = protectionSection.getInt("Level");
             String chatMessage = protectionSection.getString("Message");
             String actionbarMessage = protectionSection.getString("Actionbar");
 
+            // Create a BlockRestriction and store it for the desired material
             restrictions.put(protectedMaterial, new BlockRestriction(requiredSkill, requiredLevel, chatMessage, actionbarMessage));
         }
     }
