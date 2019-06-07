@@ -1,4 +1,4 @@
-package net.draycia.mcmmominingrestritions;
+package net.draycia.mcmmominingrestrictions;
 
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
@@ -13,26 +13,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class BlockBreakListener implements Listener {
-    private McMMOMiningRestritions main;
+    private McMMOMiningRestrictions main;
 
-    BlockBreakListener(McMMOMiningRestritions main) {
+    BlockBreakListener(McMMOMiningRestrictions main) {
         this.main = main;
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         McMMOPlayer mmoPlayer = UserManager.getPlayer(event.getPlayer());
-
         if (mmoPlayer == null) {
             event.setCancelled(true);
             return;
         }
 
         ConfigurationSection section = main.getConfig().getConfigurationSection("Restrictions." + event.getBlock().getType().name());
-        if (section == null) return;
+        if (section == null) {
+            return;
+        }
 
         PrimarySkillType skillType = PrimarySkillType.getSkill(section.getString("Skill"));
-        if (skillType == null) return;
+        if (skillType == null) {
+            return;
+        }
 
         int requiredLevel = section.getInt("Level");
         int playerLevel = ExperienceAPI.getLevel(event.getPlayer(), skillType);

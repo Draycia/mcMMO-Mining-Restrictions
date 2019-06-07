@@ -1,8 +1,8 @@
-package net.draycia.mcmmominingrestritions;
+package net.draycia.mcmmominingrestrictions;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class McMMOMiningRestritions extends JavaPlugin {
+public final class McMMOMiningRestrictions extends JavaPlugin {
 
     @Override
     public void onEnable() {
