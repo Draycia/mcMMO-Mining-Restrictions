@@ -1,9 +1,12 @@
-package net.draycia.mcmmominingrestrictions;
+package net.draycia.mcmmominingrestrictions.listeners;
 
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType;
 import com.gmail.nossr50.util.player.UserManager;
+import net.draycia.mcmmominingrestrictions.utilities.MMRListener;
+import net.draycia.mcmmominingrestrictions.utilities.MMRRestriction;
+import net.draycia.mcmmominingrestrictions.McMMOMiningRestrictions;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -15,24 +18,34 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.HashMap;
 
-public class BlockBreakListener implements Listener {
+public class BlockBreakListener implements Listener, MMRListener {
     private McMMOMiningRestrictions main;
-    private HashMap<Material, BlockRestriction> restrictions = new HashMap<>();
+    private HashMap<Material, MMRRestriction> restrictions = new HashMap<>();
 
-    BlockBreakListener(McMMOMiningRestrictions main) {
+    private boolean enabled;
+
+    public BlockBreakListener(McMMOMiningRestrictions main) {
         this.main = main;
 
-        loadProtections();
+        loadRestrictions();
     }
 
     /**
      * Clear protections and load them in from the config
      */
-    public void loadProtections() {
+    @Override
+    public void loadRestrictions() {
+        enabled = main.getConfig().getBoolean("Restrictions.ItemPickup");
+
+        // If this isn't enabled, don't even attempt to load from config
+        if (!enabled) {
+            return;
+        }
+
         restrictions.clear();
 
         // Iterate through all block entries in the config
-        ConfigurationSection rootSection = main.getConfig().getConfigurationSection("Restrictions");
+        ConfigurationSection rootSection = main.getConfig().getConfigurationSection("BlockBreak");
         for (String sectionKey : rootSection.getKeys(false)) {
             ConfigurationSection protectionSection = rootSection.getConfigurationSection(sectionKey);
 
@@ -45,19 +58,18 @@ public class BlockBreakListener implements Listener {
             String chatMessage = protectionSection.getString("Message");
             String actionbarMessage = protectionSection.getString("Actionbar");
 
-            // Create a BlockRestriction and store it for the desired material
-            restrictions.put(protectedMaterial, new BlockRestriction(requiredSkill, requiredLevel, chatMessage, actionbarMessage));
+            // Create a MMRRestriction and store it for the desired material
+            restrictions.put(protectedMaterial, new MMRRestriction(requiredSkill, requiredLevel, chatMessage, actionbarMessage));
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getPlayer().hasPermission("mmr.bypass")) return;
+        if (!enabled) {
+            return;
+        }
 
-        // Ensure the player's data is loaded in, cancel block breaks if it isn't
-        McMMOPlayer mmoPlayer = UserManager.getPlayer(event.getPlayer());
-        if (mmoPlayer == null) {
-            event.setCancelled(true);
+        if (event.getPlayer().hasPermission("mmr.bypass.blockbreak")) {
             return;
         }
 
@@ -66,7 +78,14 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        BlockRestriction restriction = restrictions.get(event.getBlock().getType());
+        // Ensure the player's data is loaded in, cancel block breaks if it isn't
+        McMMOPlayer mmoPlayer = UserManager.getPlayer(event.getPlayer());
+        if (mmoPlayer == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        MMRRestriction restriction = restrictions.get(event.getBlock().getType());
         PrimarySkillType skillType = restriction.getRequiredSkill();
         int playerLevel = ExperienceAPI.getLevel(event.getPlayer(), skillType);
 

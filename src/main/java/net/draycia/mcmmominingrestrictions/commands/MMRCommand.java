@@ -1,17 +1,24 @@
-package net.draycia.mcmmominingrestrictions;
+package net.draycia.mcmmominingrestrictions.commands;
 
+import net.draycia.mcmmominingrestrictions.McMMOMiningRestrictions;
+import net.draycia.mcmmominingrestrictions.listeners.BlockBreakListener;
+import net.draycia.mcmmominingrestrictions.listeners.ItemPickupListener;
+import net.draycia.mcmmominingrestrictions.utilities.MMRListener;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.Listener;
+
+import java.util.ArrayList;
 
 public class MMRCommand implements CommandExecutor {
     private McMMOMiningRestrictions main;
-    private BlockBreakListener blockBreakListener;
+    private ArrayList<MMRListener> listeners;
 
-    MMRCommand(McMMOMiningRestrictions main, BlockBreakListener blockBreakListener) {
+    public MMRCommand(McMMOMiningRestrictions main, ArrayList<MMRListener> listeners) {
         this.main = main;
-        this.blockBreakListener = blockBreakListener;
+        this.listeners = listeners;
     }
 
     @Override
@@ -23,7 +30,10 @@ public class MMRCommand implements CommandExecutor {
 
         // Otherwise reload config and alert the command sender the command was ran
         main.reloadConfig();
-        blockBreakListener.loadProtections();
+
+        for (MMRListener listener : listeners) {
+            listener.loadRestrictions();
+        }
 
         String message = "&amcMMO-Mining-Restrictions successfully reloaded!";
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

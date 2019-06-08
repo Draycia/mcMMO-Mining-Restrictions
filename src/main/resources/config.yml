@@ -1,4 +1,8 @@
 Restrictions:
+  BlockBreak: true
+  ItemPickup: true
+
+BlockBreak:
   # Name of the material that should be restricted
   IRON_ORE:
     # mcMMO skill - can be any skill
@@ -11,18 +15,10 @@ Restrictions:
     # Message to send to the player when the action is cancelled
     # Leave blank to disable
     Message: ''
-  GOLD_ORE:
+
+ItemPickup:
+  IRON_INGOT:
     Skill: Mining
-    Level: 30
-    Actionbar: ''
-    Message: ''
-  DIAMOND_ORE:
-    Skill: Mining
-    Level: 45
-    Actionbar: ''
-    Message: ''
-  EMERALD_ORE:
-    Skill: Mining
-    Level: 60
+    Level: 15
     Actionbar: ''
     Message: ''
