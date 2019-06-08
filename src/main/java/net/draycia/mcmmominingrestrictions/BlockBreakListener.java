@@ -21,7 +21,7 @@ public class BlockBreakListener implements Listener {
 
     BlockBreakListener(McMMOMiningRestrictions main) {
         this.main = main;
-        
+
         loadProtections();
     }
 
@@ -52,6 +52,8 @@ public class BlockBreakListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (event.getPlayer().hasPermission("mmr.bypass")) return;
+
         // Ensure the player's data is loaded in, cancel block breaks if it isn't
         McMMOPlayer mmoPlayer = UserManager.getPlayer(event.getPlayer());
         if (mmoPlayer == null) {

@@ -1,8 +1,15 @@
 Restrictions:
+  # Name of the material that should be restricted
   IRON_ORE:
+    # mcMMO skill - can be any skill
     Skill: Mining
+    # The level of the Skill the player has to have
     Level: 15
+    # Actionbar to send to the player when the action is cancelled
+    # Leave blank to disable
     Actionbar: ''
+    # Message to send to the player when the action is cancelled
+    # Leave blank to disable
     Message: ''
   GOLD_ORE:
     Skill: Mining
