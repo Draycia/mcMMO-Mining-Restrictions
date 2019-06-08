@@ -1,4 +1,4 @@
-package net.draycia.mcmmominingrestrictions.utilities;
+package net.draycia.mcmmorestrictions.utilities;
 
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType;
 

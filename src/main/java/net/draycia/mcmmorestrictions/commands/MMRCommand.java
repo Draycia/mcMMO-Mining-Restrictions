@@ -1,22 +1,19 @@
-package net.draycia.mcmmominingrestrictions.commands;
+package net.draycia.mcmmorestrictions.commands;
 
-import net.draycia.mcmmominingrestrictions.McMMOMiningRestrictions;
-import net.draycia.mcmmominingrestrictions.listeners.BlockBreakListener;
-import net.draycia.mcmmominingrestrictions.listeners.ItemPickupListener;
-import net.draycia.mcmmominingrestrictions.utilities.MMRListener;
+import net.draycia.mcmmorestrictions.McMMORestrictions;
+import net.draycia.mcmmorestrictions.utilities.MMRListener;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 
 public class MMRCommand implements CommandExecutor {
-    private McMMOMiningRestrictions main;
+    private McMMORestrictions main;
     private ArrayList<MMRListener> listeners;
 
-    public MMRCommand(McMMOMiningRestrictions main, ArrayList<MMRListener> listeners) {
+    public MMRCommand(McMMORestrictions main, ArrayList<MMRListener> listeners) {
         this.main = main;
         this.listeners = listeners;
     }

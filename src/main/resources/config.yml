@@ -1,6 +1,7 @@
 Restrictions:
   BlockBreak: true
   ItemPickup: true
+  WorldEnter: false
 
 BlockBreak:
   # Name of the material that should be restricted
@@ -20,5 +21,12 @@ ItemPickup:
   IRON_INGOT:
     Skill: Mining
     Level: 15
+    Actionbar: ''
+    Message: ''
+
+WorldEnter:
+  world_nether:
+    Skill: Alchemy
+    Level: 50
     Actionbar: ''
     Message: ''

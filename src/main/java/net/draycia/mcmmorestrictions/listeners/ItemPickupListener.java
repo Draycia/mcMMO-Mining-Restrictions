@@ -1,12 +1,12 @@
-package net.draycia.mcmmominingrestrictions.listeners;
+package net.draycia.mcmmorestrictions.listeners;
 
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType;
 import com.gmail.nossr50.util.player.UserManager;
-import net.draycia.mcmmominingrestrictions.utilities.MMRListener;
-import net.draycia.mcmmominingrestrictions.utilities.MMRRestriction;
-import net.draycia.mcmmominingrestrictions.McMMOMiningRestrictions;
+import net.draycia.mcmmorestrictions.McMMORestrictions;
+import net.draycia.mcmmorestrictions.utilities.MMRListener;
+import net.draycia.mcmmorestrictions.utilities.MMRRestriction;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -20,12 +20,12 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import java.util.HashMap;
 
 public class ItemPickupListener implements Listener, MMRListener {
-    private McMMOMiningRestrictions main;
+    private McMMORestrictions main;
     private HashMap<Material, MMRRestriction> restrictions = new HashMap<>();
 
-    boolean enabled = true;
+    private boolean enabled;
 
-    public ItemPickupListener(McMMOMiningRestrictions main) {
+    public ItemPickupListener(McMMORestrictions main) {
         this.main = main;
 
         loadRestrictions();

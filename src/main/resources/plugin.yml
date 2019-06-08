@@ -1,6 +1,6 @@
 name: mcMMOMiningRestrictions
 version: ${project.version}
-main: net.draycia.mcmmominingrestrictions.McMMOMiningRestrictions
+main: net.draycia.mcmmorestrictions.McMMORestrictions
 api-version: 1.13
 depend: [mcMMO]
 commands:
